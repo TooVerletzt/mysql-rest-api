@@ -10,12 +10,9 @@ server.options('*', cors());
 server.use(express.json());
 server.use('/api', routes);
 
-// Sincronizar las tablas antes de iniciar el servidor
-sequelize.sync({ force: false }) // Cambia a 'true' si quieres que las tablas se reinicien en cada ejecución
+sequelize.sync({ force: true }) // Esto reinicia las tablas
   .then(() => {
     console.log('✅ Tablas sincronizadas con la base de datos');
-    
-    // Inicia el servidor solo después de la sincronización
     server.listen(process.env.PORT || 3000, () => {
       console.log(`Servidor corriendo en http://localhost:${process.env.PORT || 3000}`);
     });
@@ -23,7 +20,5 @@ sequelize.sync({ force: false }) // Cambia a 'true' si quieres que las tablas se
   .catch((err) => {
     console.error('❌ Error al sincronizar tablas:', err.message);
   });
-
-module.exports = server;
 
 
